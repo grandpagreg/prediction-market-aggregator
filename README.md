@@ -1,103 +1,94 @@
 # Prediction Market Aggregator
 
-## 🎯 Project Goal
+A small Python CLI prototype for collecting prediction market data. The current implementation fetches active markets from Polymarket, extracts each outcome and its probability, writes the results to JSON, and prints a short preview in the terminal.
 
-Build an application that aggregates probabilities from multiple prediction markets (Polymarket, Metaculus, Kalshi) into a single unified probability.
+## Current Status
 
----
+This repository is not yet a full multi-market aggregator. Today it supports:
 
-## 🧩 Core Idea
+- Fetching active Polymarket markets
+- Parsing market questions, outcomes, and outcome prices
+- Saving flattened results to `data/sample_data.json`
+- Printing a preview of the first few parsed entries
 
-Different platforms provide probabilities for real-world events:
+Planned future work includes:
 
-* Elections
-* Crypto prices
-* Sports outcomes
-* Global events
+- Metaculus integration
+- Kalshi integration
+- Cross-platform event matching
+- Probability aggregation and weighting
 
-This app will:
+## Repository Layout
 
-1. Pull data from multiple sources
-2. Normalize probabilities
-3. Combine them into a single weighted probability
+```text
+.
+├── src/
+│   ├── main.py
+│   └── polymarket_api.py
+├── data/
+├── notes/
+├── requirements.txt
+└── README.md
+```
 
----
+## Requirements
 
-## 📊 Data Sources
+- Python 3.10 or newer
+- Internet access to reach the Polymarket Gamma API
 
-### Current
+## Setup
 
-* Polymarket API (primary)
+Clone the repository and create a virtual environment from the project root:
 
-### Planned
+```bash
+git clone <your-fork-or-repo-url>
+cd PredictionMarketAggregator
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
 
-* Metaculus API
-* Kalshi API
+## Run Locally
 
----
+From the repository root, run:
 
-## ⚙️ Architecture Plan
+```bash
+python src/main.py
+```
 
-* Language: Python
-* Data ingestion: REST APIs
-* Storage (initial): CSV or JSON
-* Interface (initial): Command-line (CLI)
+The script will:
 
----
+1. Fetch up to 10 active Polymarket markets
+2. Parse each market into outcome-level records
+3. Save the parsed output to `data/sample_data.json`
+4. Print a preview in the terminal
 
-## 🪜 Development Phases
+If you prefer not to activate the environment, run:
 
-### Phase 1: Data Ingestion
+```bash
+./venv/bin/python src/main.py
+```
 
-* [ ] Connect to Polymarket API
-* [ ] Fetch active markets
-* [ ] Extract probabilities
+## Output
 
-### Phase 2: Normalization
+Successful runs write JSON output to:
 
-* [ ] Standardize probability format (0–1)
-* [ ] Normalize event names
-* [ ] Handle timeframes
+```text
+data/sample_data.json
+```
 
-### Phase 3: Aggregation
+Each entry looks like:
 
-* [ ] Combine probabilities
-* [ ] Add weighting (liquidity, volume)
-* [ ] Output unified probability
+```json
+{
+  "question": "BitBoy convicted?",
+  "outcome": "Yes",
+  "probability": 0.16
+}
+```
 
-### Phase 4: Expansion
+## Notes
 
-* [ ] Add Metaculus
-* [ ] Add Kalshi
-* [ ] Improve matching algorithm
-
----
-
-## 🧠 Key Decisions
-
-* Start simple: weighted average
-* Use liquidity as weighting factor
-* Focus on one platform before scaling
-
----
-
-## ❓ Open Questions
-
-* How to match similar events across platforms?
-* How to handle different resolution dates?
-* How to weight low-liquidity markets?
-
----
-
-## 🔄 Current Task
-
-👉 Build a Python script to pull and display Polymarket data
-
----
-
-## 📝 Notes
-
-* Keep everything modular
-* Don’t overcomplicate early
-* Validate each step before moving on
-
+- Run commands from the repository root so the relative `data/sample_data.json` output path resolves correctly.
+- The `data/*.json` output is intentionally ignored by Git.
+- If the API request fails, verify your internet connection and DNS resolution.
